@@ -10,17 +10,24 @@ function App() {
     const newUser = {
       name: username,
       age: inputAge,
-      id: Math.random().toString()
+      id: Math.random().toString(),
+      active: true
     }
 
   setUsersList((prevUsersList) => {
     return [...prevUsersList, newUser];
   })
 };
+function deleteUserHandler(userId){
+  const userIndex = usersList.findIndex( user => user.id === userId);
+  const updatedUsers = [...usersList];
+  updatedUsers[userIndex].active=false;
+  setUsersList(updatedUsers);
+}
   return (
     <div>
       <AddUser onAddUser={addUserHandler}></AddUser>
-      <UsersList users={usersList}></UsersList>
+      <UsersList users={usersList} deleteUser={deleteUserHandler}></UsersList>
     </div>
   );
 };
