@@ -2,22 +2,32 @@ import React, {useState} from "react";
 import './AddUsers.css'; 
 import Card from "../UI/Card";
 import Button from "../UI/Button";
+import ErrorModal from "../UI/ErrorModal";
 
 const AddUser = props => {
 
     const [enteredUsername, setEnteredUsername] = useState(""); 
     const [enteredAge, setEnteredAge] = useState(""); 
-
+    const [error, setError] = useState(); 
+   
     function addUserHandler(event){
         event.preventDefault(); 
 
         if(+enteredAge < 1){
+            setError({
+                title: "Invalid age",
+                message: "Please enter a valid age (age >0)"
+            }); 
             return; 
         }
         if(enteredUsername.trim().length === 0 || enteredAge.trim() === 0){
+            setError({
+                title: "Invalid input", 
+                message: "Please enter a valid nameand age (non-empty values"
+            })
             return; 
         }
-        console.log(enteredUsername, enteredAge)
+        props.onAddUser(enteredUsername, enteredAge); 
 
         setEnteredAge(""); 
         setEnteredUsername(""); 
@@ -33,7 +43,9 @@ const AddUser = props => {
 
 
     return(
-        <Card>
+        <div>     
+            <ErrorModal title = "An error occurred" message="Something went wrong"></ErrorModal>
+            <Card>
       <form onSubmit={addUserHandler}>
             <label htmlFor="username">Username</label>
             <input id="username" type="text" value={enteredUsername} onChange={usernameChangeHandler}></input>
@@ -43,6 +55,8 @@ const AddUser = props => {
         </form>
 
         </Card>
+        </div>
+   
   
 
     ); 
